@@ -1,15 +1,22 @@
 file=cell(8,1);
 file{1}='dw8192.mat';
-file{2}='conf5_0-4x4-10.mat';%fushu
-file{3}='epb1.mat';
-file{4}='psmigr_2.mat';
-file{5}='raefsky1.mat';
-file{6}='scircuit.mat';%太大
-file{7}='t2d_q9.mat';
-file{8}='torso2.mat';%太大
+file{2}='epb1.mat';
+file{3}='psmigr_2.mat';
+file{4}='raefsky1.mat';
+file{5}='scircuit.mat';
+file{6}='t2d_q9.mat';
+file{7}='torso2.mat';
+file{8}='conf5_0-4x4-10.mat';%fushu
 compressibility=[];
 filename=file{6};
-compressibility(1)=top(filename)
+h = waitbar(0,'压缩中，请稍等...');
+for i=1:7
+    waitbar(i,h,sprintf('第几个：%d/%d',i,7));
+    compressibility(i)=top(file{i});
+end
+close(h);
+disp('compressibility = ');
+disp(compressibility);
 function [compressibility]=top(filename)
     [shape,matrix]=get_matrix(filename);
     disp('matrix(1,:)');
@@ -21,8 +28,6 @@ function [compressibility]=top(filename)
     compressibility=hfrlc(shape,matrix);
     %disp(compressibility);
 end
-
-
 
 function [shape,data]=get_matrix(filename)
     % input is sparse matrix 's filename 
