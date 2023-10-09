@@ -10,7 +10,7 @@ file{8}='conf5_0-4x4-10.mat';%fushu
 compressibility=[];
 filename=file{6};
 h = waitbar(0,'压缩中，请稍等...');
-for i=1:1
+for i=2:2
     waitbar(i,h,sprintf('第几个：%d/%d',i,7));
     compressibility(i)=top(file{i});
 end
@@ -41,11 +41,12 @@ end
 function [hex_num]=quantify(float_num)
     %input is double float data
     %output is 16bit data
-    float_num=float_num*256.0*4;
+    float_num=float_num*256.0*128;
     int_num=round(float_num);
     % 将浮点数转换为16进制字符串
     [high,weight]=size(int_num);
     vector_hex_num = dec2hex(int_num);
+    %vector_hex_num(1,:)
     %disp('vector_hex_num shape');
     %disp(size(vector_hex_num));
     hex_num=[];
@@ -79,7 +80,7 @@ function [compressibility]=hfrlc(shape,sparse_matrix)
     close(h);
     fprintf('压缩后需要的存储空间 %d Byte \n',sum(newcode_len)/2.0);
     fprintf('压缩前需要的存储空间 %d Byte \n',2*prod(shape));
-    compressibility=sum(newcode_len)*100.0/(prod(shape));
+    compressibility=(sum(newcode_len)/2.0)*100.0/(2*(prod(shape)));
     fprintf('compressibility=%f%% \n',compressibility);
     
 end
