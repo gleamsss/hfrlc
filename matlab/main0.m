@@ -10,7 +10,7 @@ file{8}='conf5_0-4x4-10.mat';%fushu
 compressibility=[];
 filename=file{6};
 h = waitbar(0,'压缩中，请稍等...');
-for i=2:2
+for i=3:3
     waitbar(i,h,sprintf('第几个：%d/%d',i,7));
     compressibility(i)=top(file{i});
 end
@@ -46,7 +46,7 @@ function [hex_num]=quantify(float_num)
     % 将浮点数转换为16进制字符串
     [high,weight]=size(int_num);
     vector_hex_num = dec2hex(int_num);
-    %vector_hex_num(1,:)
+    vector_hex_num(1,:)
     %disp('vector_hex_num shape');
     %disp(size(vector_hex_num));
     hex_num=[];
