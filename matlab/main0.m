@@ -1,16 +1,17 @@
 file=cell(8,1);
-file{1}='dw8192.mat';
-file{2}='epb1.mat';
-file{3}='psmigr_2.mat';
-file{4}='raefsky1.mat';
-file{5}='scircuit.mat';
-file{6}='t2d_q9.mat';
-file{7}='torso2.mat';
+file{1}='dw8192.mat';   %max=40.5641    min= -58.2743
+file{2}='epb1.mat';     %max=0.1450     min= -0.0592
+file{3}='psmigr_2.mat'; %max=0.7531     min=  0
+file{4}='raefsky1.mat'; %max=1          min= -0.6124
+file{5}='scircuit.mat'; %max=21967      min= -8214.9
+file{6}='t2d_q9.mat';   %max=3.6100     min= -0.5856
+file{7}='torso2.mat';   %max=4.7106     min= -3.9199
 file{8}='conf5_0-4x4-10.mat';%fushu
 compressibility=[];
 filename=file{6};
+xishu=256.0;
 h = waitbar(0,'压缩中，请稍等...');
-for i=1:7
+for i=1:1
     waitbar(i,h,sprintf('第几个：%d/%d',i,7));
     compressibility(i)=top(file{i});
 end
@@ -40,7 +41,7 @@ end
 function [hex_num]=quantify(float_num)
     %input is double float data
     %output is 16bit data
-    float_num=float_num*256.0;
+    float_num=float_num*xishu;
     int_num=round(float_num);
     % 将浮点数转换为16进制字符串
     [high,weight]=size(int_num);
@@ -62,20 +63,17 @@ function [compressibility]=hfrlc(shape,sparse_matrix)
     high=shape(1);
     weight=shape(2);
     newcode_len=[];
-    vector = [];
     %vector_int=cell(high,1);
     %vector_hfrlc=cell(high, 1);
     h = waitbar(0,'压缩中，请稍等...');
     for i=1:high
+        vector = [];
         waitbar(i/high,h,sprintf('进度：%f%%',i*100/high));
-        vector(i,:)=sparse_matrix(i,:);
-        quantify(vector(i,:));
-        vector_int{i}=quantify(vector(i,:));
-        temp_vector_int=[];
-        temp_vector_int=vector_int{i};
-        temp_vector_int=full(temp_vector_int);
-        vector_hfrlc{i}=yasuo(temp_vector_int);
-        tempshape=size(vector_hfrlc{i});
+        vector=sparse_matrix(i,:);
+        vector=full(vector);
+        vector_int=quantify(vector);
+        vector_hfrlc=yasuo(vector_int);
+        tempshape=size(vector_hfrlc);
         newcode_len(i)=tempshape(2);
     end
     close(h);
