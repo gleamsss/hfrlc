@@ -1,5 +1,5 @@
 file=cell(8,1);
-file{1}='dw8192.mat';   %max=40.5641    min= -58.2743
+file{1}='dw8192.mat';   %max=40.5641    min= -58.2743  shape=8192*8192 
 file{2}='epb1.mat';     %max=0.1450     min= -0.0592
 file{3}='psmigr_2.mat'; %max=0.7531     min=  0
 file{4}='raefsky1.mat'; %max=1          min= -0.6124
