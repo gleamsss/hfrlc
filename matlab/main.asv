@@ -45,10 +45,18 @@ function [hex_num]=quantify(float_num)
     int_num=round(float_num);
     % 将浮点数转换为16进制字符串
     [high,weight]=size(int_num);
-    
-    vector_hex_num=dec2hex(int_num,4);
+    %vector_hex_num=[]
+    hex_num='';
+   % for i=1:weight
+        vector_hex_num=dec2hex(int_num,4);
+   
+    %for i =1:weight
+    %    hex_num=[hex_num,vector_hex_num(i,:)];
+    %end
     vector_hex_num=string(vector_hex_num);
-    hex_num=strcat(vector_hex_num{:});
+    size(vector_hex_num)
+    hex_num=strcat(vector_hex_num{:})
+    sasdsa+5+
 end
 
 function [compressibility]=hfrlc(shape,sparse_matrix)
