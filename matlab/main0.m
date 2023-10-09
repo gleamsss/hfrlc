@@ -9,15 +9,12 @@ file{7}='torso2.mat';   %max=4.7106     min= -3.9199
 file{8}='conf5_0-4x4-10.mat';%fushu
 compressibility=[];
 filename=file{6};
-xishu=256.0;
 h = waitbar(0,'压缩中，请稍等...');
 for i=1:1
     waitbar(i,h,sprintf('第几个：%d/%d',i,7));
     compressibility(i)=top(file{i});
 end
 close(h);
-disp('compressibility = ');
-disp(compressibility);
 function [compressibility]=top(filename)
     [shape,matrix]=get_matrix(filename);
     disp('matrix(1,:)');
@@ -26,6 +23,9 @@ function [compressibility]=top(filename)
     disp(shape);
     ma=max(matrix(:))
     mi=min(matrix(:))
+    numNonZero=nnz(matrix(:))
+    xishudu=numNonZero*100/prod(shape);
+    fprintf('稀疏度= %f%%',xishudu);
     compressibility=hfrlc(shape,matrix);
     %disp(compressibility);
 end
@@ -41,7 +41,7 @@ end
 function [hex_num]=quantify(float_num)
     %input is double float data
     %output is 16bit data
-    float_num=float_num*xishu;
+    float_num=float_num*256.0*4;
     int_num=round(float_num);
     % 将浮点数转换为16进制字符串
     [high,weight]=size(int_num);
@@ -77,9 +77,10 @@ function [compressibility]=hfrlc(shape,sparse_matrix)
         newcode_len(i)=tempshape(2);
     end
     close(h);
-    sum(newcode_len)
-    prod(shape)
-    compressibility=sum(newcode_len)*1.0/(prod(shape));
+    fprintf('压缩后需要的存储空间 %d Byte \n',sum(newcode_len)/2.0);
+    fprintf('压缩前需要的存储空间 %d Byte \n',2*prod(shape));
+    compressibility=sum(newcode_len)*100.0/(prod(shape));
+    fprintf('compressibility=%f%% \n',compressibility);
     
 end
 
