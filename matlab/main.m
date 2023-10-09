@@ -41,7 +41,11 @@ end
 function [hex_num]=quantify(float_num)
     %input is double float data
     %output is 16bit data
+<<<<<<< HEAD
     %float_num=float_num*256.0*64;
+=======
+    %float_num=float_num*256.0*32;
+>>>>>>> 563fff3353a1748134b94b1570e612a14d15f62d
     int_num=round(float_num);
     % 将浮点数转换为16进制字符串
     [high,weight]=size(int_num);
