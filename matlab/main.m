@@ -10,7 +10,7 @@ file{8}='conf5_0-4x4-10.mat';%fushu
 compressibility=[];
 filename=file{6};
 h = waitbar(0,'压缩中，请稍等...');
-for i=5:5
+for i=7:7
     waitbar(i,h,sprintf('第几个：%d/%d',i,7));
     compressibility(i)=top(file{i});
 end
@@ -41,7 +41,7 @@ end
 function [hex_num]=quantify(float_num)
     %input is double float data
     %output is 16bit data
-    %float_num=float_num*256.0*32;
+    float_num=float_num*256.0*32;
     int_num=round(float_num);
     % 将浮点数转换为16进制字符串
     [high,weight]=size(int_num);
