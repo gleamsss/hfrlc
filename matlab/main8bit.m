@@ -1,17 +1,15 @@
-file=cell(8,1);
-file{1}='dw8192.mat';   %max=40.5641    min= -58.2743  shape=8192*8192 
-file{2}='epb1.mat';     %max=0.1450     min= -0.0592
-file{3}='psmigr_2.mat'; %max=0.7531     min=  0
-file{4}='raefsky1.mat'; %max=1          min= -0.6124
-file{5}='scircuit.mat'; %max=21967      min= -8214.9
-file{6}='t2d_q9.mat';   %max=3.6100     min= -0.5856
-file{7}='torso2.mat';   %max=4.7106     min= -3.9199
-file{8}='conf5_0-4x4-10.mat';%fushu
+%量化到8bit，【7】符号位 【6-4】整数位 【3-0】小数位 可表示范围 【-8，8）  
+file=cell(5,1);
+file{1}='epb1.mat';     %max=0.1450     min= -0.0592
+file{2}='psmigr_2.mat'; %max=0.7531     min=  0
+file{3}='raefsky1.mat'; %max=1          min= -0.6124
+file{4}='t2d_q9.mat';   %max=3.6100     min= -0.5856
+file{5}='torso2.mat';   %max=4.7106     min= -3.9199
 compressibility=[];
-filename=file{5};
+filename=file{2};
 h = waitbar(0,'压缩中，请稍等...');
-for i=7:7
-    waitbar(i,h,sprintf('第几个：%d/%d',i,7));
+for i=5:5
+    waitbar(i,h,sprintf('第几个：%d/%d',i,5));
     compressibility(i)=top(file{i});
 end
 close(h);
@@ -40,15 +38,15 @@ end
 
 function [hex_num]=quantify(float_num)
     %input is double float data
-    %output is 16bit data
-    float_num=float_num*256.0*32;
+    %output is 8bit data
+    float_num=float_num*16;
     int_num=round(float_num);
     % 将浮点数转换为16进制字符串
     [high,weight]=size(int_num);
     %vector_hex_num=[]
     hex_num='';
    % for i=1:weight
-        vector_hex_num=dec2hex(int_num,4);
+        vector_hex_num=dec2hex(int_num,2);
    
     for i =1:weight
         hex_num=[hex_num,vector_hex_num(i,:)];
@@ -77,9 +75,9 @@ function [compressibility]=hfrlc(shape,sparse_matrix)
         newcode_len(i)=tempshape(2);
     end
     close(h);
-    fprintf('压缩后需要的存储空间 %d Byte \n',sum(newcode_len)/2.0);
-    fprintf('压缩前需要的存储空间 %d Byte \n',2*prod(shape));
-    compressibility=(sum(newcode_len)/2.0)*100.0/(2*(prod(shape)));
+    fprintf('压缩后需要的存储空间 %d Byte \n',round(sum(newcode_len)/2.0));
+    fprintf('压缩前需要的存储空间 %d Byte \n',prod(shape));
+    compressibility=(sum(newcode_len)/2.0)*100.0/(prod(shape));
     fprintf('compressibility=%f%% \n',compressibility);
     
 end
