@@ -1,18 +1,13 @@
 %量化到8bit，【7】符号位 【6-4】整数位 【3-0】小数位 可表示范围 【-8，8）  
 file=cell(5,1);
-file{1}='epb1.mat';     %max=0.1450     min= -0.0592
-file{2}='psmigr_2.mat'; %max=0.7531     min=  0
-file{3}='raefsky1.mat'; %max=1          min= -0.6124
-file{4}='t2d_q9.mat';   %max=3.6100     min= -0.5856
-file{5}='torso2.mat';   %max=4.7106     min= -3.9199
-compressibility=[];
-filename=file{2};
-h = waitbar(0,'压缩中，请稍等...');
-for i=5:5
-    waitbar(i,h,sprintf('第几个：%d/%d',i,5));
-    compressibility(i)=top(file{i});
-end
-close(h);
+file{1}='epb1.mat';     %max=0.1450     min= -0.0592    shape=14734*14734
+file{2}='psmigr_2.mat'; %max=0.7531     min=  0         shape=3140*3140
+file{3}='raefsky1.mat'; %max=1          min= -0.6124    shape=3242*3242 
+file{4}='t2d_q9.mat';   %max=3.6100     min= -0.5856    shape=9801*9801
+file{5}='torso2.mat';   %max=4.7106     min= -3.9199    shape=115967*115967
+filename=file{1};
+
+compressibility = top(filename);
 function [compressibility]=top(filename)
     [shape,matrix]=get_matrix(filename);
     disp('matrix(1,:)');
@@ -39,7 +34,7 @@ end
 function [hex_num]=quantify(float_num)
     %input is double float data
     %output is 8bit data
-    float_num=float_num*16;
+    float_num=float_num*16*8;
     int_num=round(float_num);
     % 将浮点数转换为16进制字符串
     [high,weight]=size(int_num);
@@ -94,7 +89,7 @@ function [newcode]=yasuo(oldcode)
             count=count+1;
         else oldcode(i)~='0';
             if count~=0;
-                s=['0' , sprintf('%05x',count)];
+                s=['0' , sprintf('%04x',count)];
                 newcode=[newcode , s];
                 count=0;
             end
@@ -102,11 +97,11 @@ function [newcode]=yasuo(oldcode)
         end
     end
     if count~=0;
-        s=['0' , sprintf('%05x',count)];
+        s=['0' , sprintf('%04x',count)];
         newcode=[newcode , s];
         count=0;
     end
-    newcode=[newcode , '000000'];%休止符
+    newcode=[newcode , '00000'];%休止符
 end
 
 
